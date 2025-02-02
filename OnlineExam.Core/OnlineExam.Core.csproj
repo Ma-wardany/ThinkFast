@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineExam.Domain\OnlineExam.Domain.csproj" />
+    <ProjectReference Include="..\OnlineExam.Infrastructure\OnlineExam.Infrastructure.csproj" />
+    <ProjectReference Include="..\OnlineExam.Service\OnlineExam.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Answers\Qieries\" />
+    <Folder Include="Features\ApplicationUser\Queries\" />
+    <Folder Include="Features\Authentication\Queries\" />
+    <Folder Include="Features\Enrollment\Commands\Validator\" />
+    <Folder Include="Features\Enrollment\Queries\Handler\" />
+    <Folder Include="Features\Enrollment\Queries\Models\" />
+    <Folder Include="Features\Exams\Queries\Results\" />
+    <Folder Include="Features\Instructors\Commands\Validators\" />
+    <Folder Include="Features\Students\Commands\Validators\" />
+    <Folder Include="Features\Subjects\Commands\Validators\" />
+    <Folder Include="Mappings\AnswersMapping\Queries\" />
+    <Folder Include="Mappings\ApplicationUser\queries\" />
+    <Folder Include="Mappings\EnrollmentMapping\Queries\" />
+    <Folder Include="Mappings\ExamMapping\Query\" />
+    <Folder Include="Mappings\QuestionMapping\Queries\" />
+    <Folder Include="Mappings\SubjectMappings\Queries\" />
+  </ItemGroup>
+
+</Project>

@@ -23,7 +23,7 @@ namespace OnlineExam.API
             //Swagger Gn
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Exam", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ThinkFast", Version = "v1" });
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {

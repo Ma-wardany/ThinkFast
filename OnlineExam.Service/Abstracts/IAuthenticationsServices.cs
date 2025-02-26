@@ -1,9 +1,5 @@
-﻿
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Distributed;
-using OnlineExam.Domain.Results;
+﻿using OnlineExam.Domain.Results;
 using OnlineExam.Service.Enums;
-using OnlineExam.Service.Services;
 
 namespace OnlineExam.Service.Abstracts
 {
@@ -14,5 +10,6 @@ namespace OnlineExam.Service.Abstracts
         public Task<AuthenticationResultEnum> RequestRestPasswordOPT(string Email);
         public Task<(string?, AuthenticationResultEnum)> VerifyOTP(string Email, string Otp);
         public Task<AuthenticationResultEnum> ResetPassword(string Email, string Token, string NewPassword);
+        public Task<AuthenticationResultEnum> SignOut(string UserId);
     }
 }

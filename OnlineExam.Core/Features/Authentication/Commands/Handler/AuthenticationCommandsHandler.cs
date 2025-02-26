@@ -12,7 +12,8 @@ namespace OnlineExam.Core.Features.Authentication.Commands.Handler
                                                  IRequestHandler<RefreshTokenComamnd, Response<JWTAuthResult>>,
                                                  IRequestHandler<RequestResetPasswordOTPCommand, Response<string>>,
                                                  IRequestHandler<VerifyOTPCommand, Response<string>>,
-                                                 IRequestHandler<ResetPasswordCommand, Response<string>>
+                                                 IRequestHandler<ResetPasswordCommand, Response<string>>,
+                                                 IRequestHandler<SignoutCommand, Response<string>>
     {
         private readonly IAuthenticationsServices authenticationService;
 
@@ -51,8 +52,8 @@ namespace OnlineExam.Core.Features.Authentication.Commands.Handler
 
             return status switch
             {
-                AuthenticationResultEnum.INVALID_ACCESS_TOKEN => BadRequest<JWTAuthResult>("invalid access or refresh token"),
-                AuthenticationResultEnum.INVALID_REFRESH_TOKEN => BadRequest<JWTAuthResult>("this email is not confirmed!"),
+                AuthenticationResultEnum.INVALID_ACCESS_TOKEN => BadRequest<JWTAuthResult>("invalid access or access token"),
+                AuthenticationResultEnum.INVALID_REFRESH_TOKEN => BadRequest<JWTAuthResult>("invalid refresh or access token"),
                 _ or AuthenticationResultEnum.FAILED => BadRequest<JWTAuthResult>("something went wrong")
             };
         }
@@ -100,6 +101,17 @@ namespace OnlineExam.Core.Features.Authentication.Commands.Handler
                 AuthenticationResultEnum.NOTFOUND_USER       => NotFound<string>("something went wrong!"),
                 AuthenticationResultEnum.INVALID_RESET_TOKEN => BadRequest<string>("invalid reset token"),
                 _ or AuthenticationResultEnum.FAILED         => BadRequest<string>("not found user!"),
+            };
+        }
+
+        public async Task<Response<string>> Handle(SignoutCommand request, CancellationToken cancellationToken)
+        {
+            var result = await authenticationService.SignOut(request.UserId);
+
+            return result switch
+            {
+                AuthenticationResultEnum.SUCCESS     => Success<string>(null, "signed out successfully!"),
+                _ or AuthenticationResultEnum.FAILED => BadRequest<string>("something went wrong!")
             };
         }
     }

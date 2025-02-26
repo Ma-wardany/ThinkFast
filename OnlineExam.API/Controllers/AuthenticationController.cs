@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineExam.API.Base;
 using OnlineExam.Core.Features.ApplicationUser.Commands.Models;
 using OnlineExam.Core.Features.Authentication.Commands.Models;
+using System.Security.Claims;
 
 namespace OnlineExam.API.Controllers
 {
@@ -44,6 +45,22 @@ namespace OnlineExam.API.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> RefreshToken([FromQuery] ResetPasswordCommand command)
         {
+            var response = await Mediator.Send(command);
+            return FinalResponse(response);
+        }
+
+
+        [HttpPost("sign-out")]
+        [Authorize]
+        public async Task<IActionResult> RefreshToken([FromQuery] string Id)
+        {
+            var UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            var command = new SignoutCommand
+            {
+                UserId = UserId.Value ?? ""
+            }; 
+
             var response = await Mediator.Send(command);
             return FinalResponse(response);
         }

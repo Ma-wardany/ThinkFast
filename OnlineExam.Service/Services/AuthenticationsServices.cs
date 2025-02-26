@@ -13,7 +13,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using static System.Net.WebRequestMethods;
 
 namespace OnlineExam.Service.Services
 {
@@ -123,17 +122,8 @@ namespace OnlineExam.Service.Services
 
 
 
-                var olderTokens = refreshTokenRepository.GetTableAsTracking()
-                                         .Where(rt => rt.UserId == user.Id
-                                                      && rt.RefreshTokenString != RefreshToken
-                                                      && !rt.IsRevoked);
-                if (olderTokens.Any())
-                {
-                    await olderTokens.ExecuteUpdateAsync(rt => rt.SetProperty(r => r.IsRevoked, true));
-                }
-
                 var StoredRefreshToken = await refreshTokenRepository.GetTableAsTracking()
-                                               .SingleOrDefaultAsync(rt => rt.UserId == user.Id && !rt.IsRevoked);
+                                               .FirstOrDefaultAsync(rt => rt.UserId == user.Id && !rt.IsRevoked);
 
                 if (StoredRefreshToken == null || StoredRefreshToken.RefreshTokenString != RefreshToken)
                     return (null, AuthenticationResultEnum.INVALID_REFRESH_TOKEN);
@@ -278,6 +268,22 @@ namespace OnlineExam.Service.Services
                 Console.WriteLine($"Errors: {ex.InnerException!.Message}");
                 return AuthenticationResultEnum.FAILED;
             }
+        }
+
+        public async Task<AuthenticationResultEnum> SignOut(string UserId)
+        {
+            var UserRefreshTokens = refreshTokenRepository.GetTableAsTracking()
+                                         .Where(r => r.UserId == UserId);
+
+            if(UserRefreshTokens.Any())
+            {
+                await signInManager.SignOutAsync();
+
+                await UserRefreshTokens.ExecuteDeleteAsync();
+                return AuthenticationResultEnum.SUCCESS;
+            }
+
+            return AuthenticationResultEnum.FAILED;
         }
 
 

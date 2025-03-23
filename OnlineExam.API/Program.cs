@@ -51,6 +51,16 @@ namespace OnlineExam.API
                 });
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
+
 
             builder.Services
                 .InfrastructureDependencies(builder.Configuration.GetConnectionString("DefaultConnection")!, builder.Configuration)
@@ -58,6 +68,8 @@ namespace OnlineExam.API
                 .CoreDependencies();
 
             var app = builder.Build();
+
+            app.UseCors("AllowAll");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
